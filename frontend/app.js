@@ -1,5 +1,7 @@
 const params = new URLSearchParams(window.location.search);
-const API_BASE = params.get("api") || window.localStorage.getItem("medicoreApiBase") || "http://localhost:8080";
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "";
+const DEFAULT_API = isLocal ? "http://localhost:8080" : "https://hms-backend-yq05.onrender.com";
+const API_BASE = params.get("api") || window.localStorage.getItem("medicoreApiBase") || DEFAULT_API;
 const api = {
     patients: `${API_BASE}/api/patients`,
     doctors: `${API_BASE}/api/doctors`,
