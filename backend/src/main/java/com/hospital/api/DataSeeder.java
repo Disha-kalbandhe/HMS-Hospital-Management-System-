@@ -17,36 +17,41 @@ public class DataSeeder {
     CommandLineRunner seedDatabase(PatientRepository patients, DoctorRepository doctors,
             AppointmentRepository appointments) {
         return args -> {
-            if (patients.count() == 0 && doctors.count() == 0 && appointments.count() == 0) {
-                patients.save(patient(100, "Amara Kapoor", 34, "Cardiology", "Hypertension", "ADMITTED", "Dr. Iyer",
+            boolean hasOldData = patients.findAll().stream().anyMatch(p -> p.getName().equals("Amara Kapoor"));
+            if (patients.count() == 0 || hasOldData) {
+                appointments.deleteAll();
+                patients.deleteAll();
+                doctors.deleteAll();
+
+                patients.save(patient(100, "Sarah Jenkins", 34, "Cardiology", "Hypertension", "ADMITTED", "Dr. Marcus Sterling",
                         "2024-05-10"));
-                patients.save(patient(101, "Ravi Sharma", 58, "ICU", "Cardiac Arrest", "CRITICAL", "Dr. Mehta",
+                patients.save(patient(101, "David Miller", 58, "ICU", "Cardiac Arrest", "CRITICAL", "Dr. Anya Chen",
                         "2024-05-18"));
-                patients.save(patient(102, "Priya Mehta", 27, "Orthopedics", "Fracture - Tibia", "SURGERY",
-                        "Dr. Kulkarni", "2024-05-17"));
-                patients.save(patient(103, "Nikhil Joshi", 45, "Neurology", "Chronic Migraine", "OBSERVATION",
-                        "Dr. Verma", "2024-05-19"));
-                patients.save(patient(104, "Sunita Rao", 62, "General", "Diabetes - T2", "DISCHARGED", "Dr. Thomas",
+                patients.save(patient(102, "Elena Rostova", 27, "Orthopedics", "Fracture - Tibia", "SURGERY",
+                        "Dr. Evelyn Vance", "2024-05-17"));
+                patients.save(patient(103, "Liam Gallagher", 45, "Neurology", "Chronic Migraine", "OBSERVATION",
+                        "Dr. Kenji Tanaka", "2024-05-19"));
+                patients.save(patient(104, "Chloe Dupont", 62, "General", "Diabetes - T2", "DISCHARGED", "Dr. Anya Chen",
                         "2024-05-05"));
 
-                doctors.save(doctor(200, "Dr. Anand Iyer", "Cardiology", "+91-9823001122", "a.iyer@medicore.in", 12,
+                doctors.save(doctor(200, "Dr. Marcus Sterling", "Cardiology", "+91-9823001122", "m.sterling@medicore.in", 12,
                         "Mon-Fri"));
-                doctors.save(doctor(201, "Dr. Sonal Mehta", "ICU / CCU", "+91-9823002233", "s.mehta@medicore.in", 8,
+                doctors.save(doctor(201, "Dr. Anya Chen", "ICU / CCU", "+91-9823002233", "a.chen@medicore.in", 8,
                         "24/7 On-call"));
-                doctors.save(doctor(202, "Dr. Prakash Kulkarni", "Orthopedics", "+91-9823003344",
-                        "p.kulkarni@medicore.in", 10, "Mon-Sat"));
-                doctors.save(doctor(203, "Dr. Arvind Verma", "Neurology", "+91-9823004455", "a.verma@medicore.in", 9,
+                doctors.save(doctor(202, "Dr. Evelyn Vance", "Orthopedics", "+91-9823003344",
+                        "e.vance@medicore.in", 10, "Mon-Sat"));
+                doctors.save(doctor(203, "Dr. Kenji Tanaka", "Neurology", "+91-9823004455", "k.tanaka@medicore.in", 9,
                         "Tue-Sat"));
 
-                appointments.save(appointment(300, "Fatima Sheikh", "Dr. Iyer", "Cardiology", "2024-05-21", "09:00",
+                appointments.save(appointment(300, "Sophia Martinez", "Dr. Marcus Sterling", "Cardiology", "2024-05-21", "09:00",
                         "SCHEDULED"));
-                appointments.save(appointment(301, "Rohan Patil", "Dr. Kulkarni", "Ophthalmology", "2024-05-21",
+                appointments.save(appointment(301, "Noah Campbell", "Dr. Evelyn Vance", "Ophthalmology", "2024-05-21",
                         "10:30", "IN_PROGRESS"));
-                appointments.save(appointment(302, "Deepa Nair", "Dr. Thomas", "Orthopedics", "2024-05-21", "12:00",
+                appointments.save(appointment(302, "Oliver Bennett", "Dr. Anya Chen", "Orthopedics", "2024-05-21", "12:00",
                         "SCHEDULED"));
                 appointments.save(
-                        appointment(303, "Arjun Singh", "Dr. Rao", "General", "2024-05-21", "14:15", "SCHEDULED"));
-                appointments.save(appointment(304, "Meena Krishnan", "Dr. Verma", "Neurology", "2024-05-21", "16:00",
+                        appointment(303, "Lucas Silva", "Dr. Marcus Sterling", "General", "2024-05-21", "14:15", "SCHEDULED"));
+                appointments.save(appointment(304, "Emma Watson", "Dr. Kenji Tanaka", "Neurology", "2024-05-21", "16:00",
                         "SCHEDULED"));
             }
         };

@@ -116,7 +116,7 @@ function renderDashboard() {
         ${pageHead("Dashboard Overview", `Today: ${new Date().toLocaleDateString(undefined, { dateStyle: "medium" })}`)}
         
         <div class="welcome-banner">
-            <h2>Welcome back, Dr. Rajan</h2>
+            <h2>Welcome back, Dr. Marcus Sterling</h2>
             <p>Here is what is happening in MediCore today. Check active wards, critical patients, and appointments.</p>
         </div>
 
