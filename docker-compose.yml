@@ -8,7 +8,12 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   api:
     build: ./backend
@@ -20,7 +25,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: "2005"
       SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
