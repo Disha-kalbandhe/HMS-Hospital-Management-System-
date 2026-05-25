@@ -114,6 +114,12 @@ function renderDashboard() {
 
     app.innerHTML = `
         ${pageHead("Dashboard Overview", `Today: ${new Date().toLocaleDateString(undefined, { dateStyle: "medium" })}`)}
+        
+        <div class="welcome-banner">
+            <h2>Welcome back, Dr. Rajan</h2>
+            <p>Here is what is happening in MediCore today. Check active wards, critical patients, and appointments.</p>
+        </div>
+
         <div class="stats-grid">
             ${statCard("Total Patients", state.patients.length, "+6.2% this month", "blue")}
             ${statCard("Admitted", countPatients("ADMITTED"), "Currently in ward", "green")}
@@ -492,7 +498,7 @@ function statusPill(status) {
 function donutChart() {
     const data = patientStatuses.map((status) => [status, countPatients(status)]);
     const total = state.patients.length || 1;
-    const colors = ["#185fa5", "#9d2d2d", "#7a4a10", "#5149a4", "#356c1f"];
+    const colors = ["#487dff", "#ff4d4d", "#ffab00", "#c084fc", "#10b981"];
     let offset = 25;
     const rings = data.map(([status, count], index) => {
         const amount = count / total * 100;
@@ -503,16 +509,16 @@ function donutChart() {
     const legend = data.map(([status, count], index) => `
         <g transform="translate(220 ${42 + index * 29})">
             <rect width="12" height="12" rx="3" fill="${colors[index]}"></rect>
-            <text x="18" y="10" font-size="13" fill="#1d2329">${labelize(status)}</text>
-            <text x="18" y="23" font-size="11" fill="#69727d">${count} patients</text>
+            <text x="18" y="10" font-size="13" fill="#f1f3fa">${labelize(status)}</text>
+            <text x="18" y="23" font-size="11" fill="#a3b0cc">${count} patients</text>
         </g>
     `).join("");
     return `
         <svg viewBox="0 0 390 230" role="img" aria-label="Patient status breakdown">
             <g transform="rotate(-90 105 105)">${rings}</g>
-            <circle cx="105" cy="105" r="48" fill="#fff"></circle>
-            <text x="105" y="106" text-anchor="middle" font-size="24" font-weight="800" fill="#1d2329">${state.patients.length}</text>
-            <text x="105" y="124" text-anchor="middle" font-size="12" fill="#69727d">patients</text>
+            <circle cx="105" cy="105" r="48" fill="#0d1429"></circle>
+            <text x="105" y="106" text-anchor="middle" font-size="24" font-weight="800" fill="#ffffff">${state.patients.length}</text>
+            <text x="105" y="124" text-anchor="middle" font-size="12" fill="#a3b0cc">patients</text>
             ${legend}
         </svg>
     `;
@@ -523,23 +529,24 @@ function barChart() {
     state.patients.forEach((patient) => counts[patient.ward] = (counts[patient.ward] || 0) + 1);
     const entries = Object.entries(counts).sort(([a], [b]) => a.localeCompare(b));
     const max = Math.max(1, ...entries.map(([, count]) => count));
-    const colors = ["#185fa5", "#356c1f", "#9d2d2d", "#7a4a10", "#5149a4", "#0f6e56", "#993556"];
+    const colors = ["#487dff", "#10b981", "#ff4d4d", "#ffab00", "#c084fc", "#00f5d4", "#ff007f"];
     const bars = entries.map(([ward, count], index) => {
         const height = Math.max(8, count / max * 142);
         const x = 32 + index * 44;
         return `
             <rect x="${x}" y="${176 - height}" width="28" height="${height}" rx="5" fill="${colors[index % colors.length]}"></rect>
-            <text x="${x + 14}" y="${166 - height}" text-anchor="middle" font-size="12" font-weight="800">${count}</text>
-            <text x="${x + 14}" y="196" text-anchor="middle" font-size="10" fill="#69727d">${escapeHtml(ward).slice(0, 7)}</text>
+            <text x="${x + 14}" y="${166 - height}" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">${count}</text>
+            <text x="${x + 14}" y="196" text-anchor="middle" font-size="10" fill="#a3b0cc">${escapeHtml(ward).slice(0, 7)}</text>
         `;
     }).join("");
     return `
         <svg viewBox="0 0 390 230" role="img" aria-label="Patients per ward">
-            <line x1="20" x2="370" y1="178" y2="178" stroke="#dedbd2"></line>
-            ${bars || `<text x="20" y="40" fill="#69727d">No ward data yet</text>`}
+            <line x1="20" x2="370" y1="178" y2="178" stroke="rgba(255, 255, 255, 0.08)"></line>
+            ${bars || `<text x="20" y="40" fill="#a3b0cc">No ward data yet</text>`}
         </svg>
     `;
 }
+
 
 function fieldTemplate(field) {
     const attrs = [
