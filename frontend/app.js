@@ -509,16 +509,16 @@ function donutChart() {
     const legend = data.map(([status, count], index) => `
         <g transform="translate(220 ${42 + index * 29})">
             <rect width="12" height="12" rx="3" fill="${colors[index]}"></rect>
-            <text x="18" y="10" font-size="13" fill="#f1f3fa">${labelize(status)}</text>
-            <text x="18" y="23" font-size="11" fill="#a3b0cc">${count} patients</text>
+            <text x="18" y="10" font-size="13" fill="#1e293b">${labelize(status)}</text>
+            <text x="18" y="23" font-size="11" fill="#475569">${count} patients</text>
         </g>
     `).join("");
     return `
         <svg viewBox="0 0 390 230" role="img" aria-label="Patient status breakdown">
             <g transform="rotate(-90 105 105)">${rings}</g>
-            <circle cx="105" cy="105" r="48" fill="#0d1429"></circle>
-            <text x="105" y="106" text-anchor="middle" font-size="24" font-weight="800" fill="#ffffff">${state.patients.length}</text>
-            <text x="105" y="124" text-anchor="middle" font-size="12" fill="#a3b0cc">patients</text>
+            <circle cx="105" cy="105" r="48" fill="#ffffff"></circle>
+            <text x="105" y="106" text-anchor="middle" font-size="24" font-weight="800" fill="#1e293b">${state.patients.length}</text>
+            <text x="105" y="124" text-anchor="middle" font-size="12" fill="#475569">patients</text>
             ${legend}
         </svg>
     `;
@@ -535,14 +535,14 @@ function barChart() {
         const x = 32 + index * 44;
         return `
             <rect x="${x}" y="${176 - height}" width="28" height="${height}" rx="5" fill="${colors[index % colors.length]}"></rect>
-            <text x="${x + 14}" y="${166 - height}" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">${count}</text>
-            <text x="${x + 14}" y="196" text-anchor="middle" font-size="10" fill="#a3b0cc">${escapeHtml(ward).slice(0, 7)}</text>
+            <text x="${x + 14}" y="${166 - height}" text-anchor="middle" font-size="12" font-weight="800" fill="#1e293b">${count}</text>
+            <text x="${x + 14}" y="196" text-anchor="middle" font-size="10" fill="#475569">${escapeHtml(ward).slice(0, 7)}</text>
         `;
     }).join("");
     return `
         <svg viewBox="0 0 390 230" role="img" aria-label="Patients per ward">
-            <line x1="20" x2="370" y1="178" y2="178" stroke="rgba(255, 255, 255, 0.08)"></line>
-            ${bars || `<text x="20" y="40" fill="#a3b0cc">No ward data yet</text>`}
+            <line x1="20" x2="370" y1="178" y2="178" stroke="rgba(0, 0, 0, 0.08)"></line>
+            ${bars || `<text x="20" y="40" fill="#475569">No ward data yet</text>`}
         </svg>
     `;
 }
