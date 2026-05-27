@@ -8,7 +8,7 @@ const api = {
     appointments: `${API_BASE}/api/appointments`
 };
 
-const state = {
+const state = {             
     page: "dashboard",
     patients: [],
     doctors: [],

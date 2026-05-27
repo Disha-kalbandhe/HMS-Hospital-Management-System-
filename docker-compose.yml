@@ -15,25 +15,74 @@ services:
       timeout: 3s
       retries: 10
 
-  api:
-    build: ./backend
+  eureka-server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: eureka-server
     ports:
-      - "8080:8080"
+      - "8761:8761"
+    restart: unless-stopped
+
+  patient-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: patient-service
+    ports:
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/hospital_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "2005"
-      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      EUREKA_URI: "http://eureka-server:8761/eureka/"
     depends_on:
       db:
         condition: service_healthy
+      eureka-server:
+        condition: service_started
+    restart: unless-stopped
+
+  doctor-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: doctor-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/hospital_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "2005"
+      EUREKA_URI: "http://eureka-server:8761/eureka/"
+    depends_on:
+      db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_URI: "http://eureka-server:8761/eureka/"
+    depends_on:
+      eureka-server:
+        condition: service_started
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
     ports:
       - "3000:80"
     depends_on:
-      - api
+      - api-gateway
+    restart: unless-stopped
 
 volumes:
   db_data:
